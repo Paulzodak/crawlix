@@ -11,7 +11,7 @@ services:
       - app_node_modules:/app/node_modules
     environment:
       - NODE_ENV=development
-      - PORT=${PORT:-8000}
+      - PORT=${PORT:-8001}
       - HOST=0.0.0.0
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}

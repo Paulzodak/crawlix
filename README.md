@@ -11,7 +11,7 @@ npm install
 Create a `.env` file:
 
 ```env
-PORT=8000
+PORT=8001
 DATABASE_URL=postgresql://user:password@localhost:5432/scraper
 OPENAI_API_KEY=your_openai_api_key
 # OPENAI_MODEL=gpt-4o-mini
@@ -37,7 +37,7 @@ The process binds to `127.0.0.1`. Set `HOST=0.0.0.0` only when a local Docker po
 
 ## API
 
-Interactive docs are at [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs). The OpenAPI document is at `/docs.json`.
+Interactive docs are at [http://127.0.0.1:8001/docs](http://127.0.0.1:8001/docs). The OpenAPI document is at `/docs.json`.
 
 ### Health
 
@@ -83,6 +83,20 @@ Not found:
   }
 }
 ```
+
+### Render HTML
+
+```
+POST /api/pdf/render
+Content-Type: application/json
+
+{
+  "html": "<html><body><h1>Hello</h1></body></html>",
+  "output": "pdf"
+}
+```
+
+`output` may be `pdf`, `png`, or `jpeg`. The response is the rendered file.
 
 ## Tests
 

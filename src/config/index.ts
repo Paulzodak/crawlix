@@ -10,9 +10,9 @@ function intEnv(name: string, fallback: number): number {
 }
 
 export const config = {
-  port: parseInt(process.env.PORT || "8000", 10),
+  port: parseInt(process.env.PORT || "8001", 10),
   /** Bind address. Defaults to loopback. Set HOST=0.0.0.0 inside Docker. */
-  host: process.env.HOST || "127.0.0.1",
+  host: process.env.HOST || "0.0.0.0",
   openai: {
     apiKey: process.env.OPENAI_API_KEY || "",
     model: process.env.OPENAI_MODEL || "gpt-4o-mini",

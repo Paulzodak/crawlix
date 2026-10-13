@@ -7,7 +7,7 @@ export const openApiDocument = {
       "Local service that finds a requested page on a website and returns normalized content for legal-document analysis.",
   },
   servers: [{ url: "/" }],
-  tags: [{ name: "Health" }, { name: "Website" }],
+  tags: [{ name: "Health" }, { name: "Website" }, { name: "Render" }],
   paths: {
     "/health": {
       get: {
@@ -104,6 +104,49 @@ export const openApiDocument = {
         },
       },
     },
+    "/api/pdf/render": {
+      post: {
+        tags: ["Render"],
+        summary: "Render HTML as a PDF or image",
+        operationId: "renderHtml",
+        description:
+          "Renders the provided HTML in Chrome and returns a PDF, PNG, or JPEG file.",
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/HtmlRenderRequest" },
+            },
+          },
+        },
+        responses: {
+          "200": {
+            description: "Rendered file",
+            content: {
+              "application/pdf": { schema: { type: "string", format: "binary" } },
+              "image/png": { schema: { type: "string", format: "binary" } },
+              "image/jpeg": { schema: { type: "string", format: "binary" } },
+            },
+          },
+          "400": {
+            description: "The body is invalid",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/HtmlRenderError" },
+              },
+            },
+          },
+          "500": {
+            description: "Chrome failed to render the HTML",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/HtmlRenderError" },
+              },
+            },
+          },
+        },
+      },
+    },
   },
   components: {
     schemas: {
@@ -152,6 +195,31 @@ export const openApiDocument = {
               },
             },
           },
+        },
+      },
+      HtmlRenderRequest: {
+        type: "object",
+        required: ["html"],
+        properties: {
+          html: { type: "string" },
+          output: { type: "string", enum: ["pdf", "png", "jpeg", "jpg"] },
+          filename: { type: "string" },
+          waitUntil: {
+            type: "string",
+            enum: ["load", "domcontentloaded", "networkidle0", "networkidle2"],
+          },
+          viewportWidth: { type: "number" },
+          viewportHeight: { type: "number" },
+          fullPage: { type: "boolean" },
+          scale: { type: "number" },
+        },
+      },
+      HtmlRenderError: {
+        type: "object",
+        required: ["error"],
+        properties: {
+          error: { type: "string" },
+          message: { type: "string" },
         },
       },
       WebsitePageFailure: {

@@ -65,7 +65,7 @@ USER pptruser
 RUN npx puppeteer browsers install chrome
 
 # Expose port
-EXPOSE 8000
+EXPOSE 8001
 
 # Set environment to production
 ENV NODE_ENV=production

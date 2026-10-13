@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile.dev
     command: sh -c "npm run prisma:generate && npm run dev"
     ports:
-      - "127.0.0.1:8000:8000"
+      - "127.0.0.1:8001:8001"
     environment:
       - HOST=0.0.0.0
       - DATABASE_URL=${DATABASE_URL}
