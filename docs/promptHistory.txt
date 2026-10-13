@@ -1,0 +1,149 @@
+You will grade the summary on these metrics (score 0-5):
+1. Risk Assessment: What are the potential risks, liabilities, and vulnerabilities identified in the document?
+Measures: High-liability clauses, Missing protections, Unbalanced terms, Undefined obligations, Legal exposure, Financial risks, Operational risks, Security vulnerabilities
+Score 0-5: 0 = Critical risks present, 5 = Well-protected with minimal risks
+
+2. Advantages/Benefits: What are the positive aspects, benefits, and strengths of the document?
+Measures: Clear benefits, Competitive advantages, Value propositions, Strengths, Positive outcomes, Opportunities, Favorable terms
+Score 0-5: 0 = No clear advantages, 5 = Significant advantages clearly identified
+
+3. Compliance: Does the document meet required standards and regulatory requirements?
+Measures: Legal compliance (privacy laws, regulatory requirements, NDAs), Industry standards, Organizational standards, Regulatory adherence, Policy compliance, Standards alignment
+Score 0-5: 0 = Non-compliant, 5 = Fully compliant with all requirements
+
+4. Potential Issues: What problems, gaps, or concerns exist in the document?
+Measures: Missing information, Contradictions, Ambiguities, Inconsistencies, Gaps in coverage, Unclear obligations, Problematic clauses, Areas of concern
+Score 0-5: 0 = Critical issues present, 5 = No significant issues identified
+
+5. Overall Quality Score: A combined assessment of risk management, benefit clarity, compliance status, and issue identification
+Score 0-5: Overall quality based on the four metrics above
+
+Additionally, extract the following structured data with atleast 5 each and maximum of 30 each.
+
+- keyPoints: Array of key points of minimum 5 and maximum 30 from the document. Each key point should have "text" (the actual text snippet) and "description" (explanation of why it's important).
+- risks: Array of identified risks of minimum 5 and maximum 30. Each risk should have "text" (the actual text snippet), "severity" ("low", "medium", or "high"), "description" (explanation of the risk), and optionally "start" and "end" (character positions in the original text).
+- advantages: Array of identified advantages/benefits of minimum 5 and maximum 30. Each advantage should have "text" (the actual text snippet), "description" (explanation of the advantage), and optionally "start" and "end" (character positions in the original text).
+- highlights: Array of text highlights for visualization of minimum 5 and maximum 30. Each highlight should have "start" and "end" (character positions), "type" ("risk", "advantage", or "compliance"), "text" (the highlighted text), and optionally "description".
+
+Return JSON ONLY in this exact format:
+{
+  "scores": {"risk": int, "advantages": int, "compliance": int, "potentialIssues": int, "overall": int},
+  "total": float, // average of the five scores
+  "notes": "short feedback highlighting key risks, advantages, compliance status, and potential issues (2-4 sentences)",
+  "keyPoints": [
+    {"text": "key point text snippet", "description": "why this is important"}
+  ],
+  "risks": [
+    {"text": "risk text snippet", "severity": "low|medium|high", "description": "risk explanation", "start": int (optional), "end": int (optional)}
+  ],
+  "advantages": [
+    {"text": "advantage text snippet", "description": "advantage explanation", "start": int (optional), "end": int (optional)}
+  ],
+  "highlights": [
+    {"start": int, "end": int, "type": "risk|advantage|compliance", "text": "highlighted text", "description": "optional description"}
+  ]
+}
+And make sure this scores JSON data is returned in the context of the client side.
+`
+
+
+
+
+=== STEP 2: GRADE THE DOCUMENT (score 0-5) ===
+1. Risk Assessment: Score 0-5
+2. Advantages/Benefits: Score 0-5
+3. Compliance: Score 0-5
+4. Potential Issues: Score 0-5
+5. Overall Quality: Score 0-5
+
+
+
+25th Jan 2026
+Include setting of user to customize highlight and analysis result metrics. For instance
+- Highlight type only risk
+- Highlight type only compliance
+
+
+
+
+
+
+
+
+
+  === STEP 1: EXTRACT HIGHLIGHTS (REQUIRED - DO THIS FIRST) ===
+  
+  Extract highlights from the CHUNK TEXT from the perspective of the CONSUMER or RECIPIENT of the document.
+  Analyze the document as if you are the person receiving, signing, or being bound by this document.
+  
+  
+  highlights:
+  - Include highlights for risks, advantages, and compliance issues found in the document
+  - The number should reflect the actual highlights present (up to 30 maximum)
+  - Each item must have: {"type": "risk|advantage|compliance", "text": "exact text from document", "description": "MANDATORY description"}
+  
+  PERSPECTIVE - CONSUMER/RECIPIENT VIEWPOINT:
+  - Analyze from the perspective of the person receiving or signing the document
+  - For RISKS: Identify what could harm, disadvantage, or create liability for the consumer/recipient
+  - For ADVANTAGES: Identify what benefits, protects, or favors the consumer/recipient
+  - For COMPLIANCE: Identify what compliance requirements, obligations, or standards apply to the consumer/recipient
+  
+  DESCRIPTION REQUIREMENTS (MANDATORY):
+  - "description" field is REQUIRED for all highlights (not optional)
+  - Use SIMPLE, CLEAR LANGUAGE with small, understandable words
+  - Avoid complex jargon, legal terminology, or technical terms - explain in plain language
+  - Break down complex concepts into easy-to-understand explanations
+  - Write as if explaining to someone without legal or technical background
+  
+  - For RISK highlights: Clearly state WHAT the risk is using simple words
+    * Example: "This part means you could be held responsible for all costs if your information gets stolen or leaked."
+    * Bad example: "This clause creates unlimited liability for the consumer in case of data breach." (too technical)
+  
+  - For ADVANTAGE highlights: Clearly state WHAT the advantage is using simple words
+    * Example: "This gives you the right to end this agreement anytime by giving 30 days notice."
+    * Bad example: "This provision grants the consumer the right to terminate the agreement with 30 days notice." (too formal)
+  
+  - For COMPLIANCE highlights: Clearly state WHAT the compliance requirement is using simple words
+    * Example: "You must follow European privacy rules that protect people's personal information."
+    * Bad example: "This section requires the consumer to comply with GDPR data protection regulations." (too technical)
+  
+  CRITICAL - HIGHLIGHT FORMAT REQUIREMENTS:
+  - Extract COMPLETE SENTENCES or CLAUSES, NOT individual words or short phrases
+  - Each highlight should be a meaningful, self-contained unit of text
+  - Minimum length: Each highlight should be at least one complete sentence (ending with . ! ?)
+  - Preferred: Extract full clauses, sentences, or sentence groups that convey complete thoughts
+  - Examples of GOOD highlights:
+    * "The party shall be liable for any damages arising from breach of this agreement."
+    * "In the event of termination, all confidential information must be returned within 30 days."
+    * "This contract is subject to the laws of the State of California."
+  - Examples of BAD highlights (DO NOT extract these):
+    * "liability" (single word)
+    * "30 days" (short phrase without context)
+    * "breach" (incomplete thought)
+  
+  IMPORTANT: 
+  - Extract based on what's ACTUALLY in the document, not a fixed number of highlights
+  - Prioritize complete sentences and clauses over fragments
+  - Extract the exact text as it appears in the document (preserve original formatting)
+  - Always provide a clear, specific description in SIMPLE, UNDERSTANDABLE WORDS explaining the risk, advantage, or compliance issue
+  - Use everyday language that anyone can understand - avoid legal jargon and technical terms
+  
+  Return JSON ONLY in this exact format:
+  {
+  
+    "highlights": [{"type": "risk|advantage|compliance", "text": "exact text from document", "description": "MANDATORY - clearly state the risk/advantage/compliance"}]
+  }
+  
+  VALIDATION CHECKLIST before returning:
+  ✓ Each highlight contains complete sentences or clauses (not single words or short phrases)
+  ✓ All highlights are analyzed from the consumer/recipient perspective
+  ✓ Each highlight has a MANDATORY description field written in SIMPLE, UNDERSTANDABLE WORDS that clearly explains:
+    - For risks: What the risk is (using plain language, no legal jargon)
+    - For advantages: What the advantage is (using everyday words)
+    - For compliance: What the compliance requirement is (explained simply)
+  ✓ Descriptions use small, common words that anyone can understand
+  ✓ Complex concepts are broken down into easy-to-understand explanations
+  ✓ The number of highlights reflects what's actually in the document
+  ✓ Maximum 30 highlights
+  ✓ All highlight text is extracted exactly as it appears in the document
+  `

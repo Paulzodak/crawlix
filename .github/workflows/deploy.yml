@@ -1,0 +1,37 @@
+name: Build and Deploy to ECR
+
+on:
+  push:
+    branches: [dev]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_URI: ${{ secrets.ECR_URI }}:latest
+
+    steps:
+      # STEP 1: Get code
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # STEP 2: Configure AWS credentials
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # STEP 3: Login to AWS ECR
+      - name: Login to Amazon ECR
+        run: |
+          aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.ECR_URI }}
+
+      # STEP 4: Build Docker image
+      - name: Build image
+        run: docker compose build app
+
+      # STEP 5: Push image to ECR
+      - name: Push image
+        run: docker compose push app

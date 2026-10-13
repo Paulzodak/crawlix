@@ -1,0 +1,155 @@
+1. Emails (magic link, welcome, verification)
+Today (synchronous on EC2)
+Client → POST /api/auth/signup or /api/auth/magic-link
+       → auth.controller → sendMagicLink() in auth.service
+       → sendMagicLinkEmail() in email.service
+       → Resend API (MagicLink React template)
+       → response back to client (after email attempt)
+The HTTP request waits on Resend. If Resend is slow or down, signup/magic-link feels slower or fails even though the user/token may already exist in Postgres.
+
+With Lambda (async, recommended pattern)
+Client → POST /api/auth/signup
+       → EC2: create user + token in DB (same as now)
+       → EC2: publish message to SQS (or EventBridge)
+       → EC2: respond 201 immediately ("check your email")
+       
+SQS → Lambda "send-email"
+    → read { type, email, token, name, magicLinkUrl }
+    → call Resend (same MagicLink template logic)
+    → on failure: retry (SQS) or send to DLQ for alerting
+What the message looks like (example):
+
+{
+  "type": "magic_link",
+  "to": "user@example.com",
+  "name": "Alex",
+  "token": "encrypted-token-here",
+  "baseUrl": "https://www.qlarety.com"
+}
+Lambda builds the link and calls resend.emails.send({ react: MagicLink(...) }) — same as email.service.ts today, just moved out of the request path.
+
+Why Lambda here
+
+Benefit	Detail
+Faster API
+EC2 doesn’t block on Resend
+Retries
+SQS retries failed sends automatically
+Scale
+Burst of signups → many Lambdas, EC2 stays light
+Isolation
+Resend/API key only on the email function
+What stays on EC2
+
+Creating verificationToken in Prisma (auth.service.ts)
+Validating magic link on POST /api/auth/verify (must stay on your main API)
+Caveat: React Email templates in Lambda need bundling (esbuild) and a bit more cold-start time than plain HTML — still fine for auth emails.
+
+2. Webhooks (inbound HTTP from third parties)
+Webhooks are HTTP POSTs from outside (Resend, Stripe, GitHub, etc.) to your URL. Lambda + API Gateway is a common fit because you get a public HTTPS endpoint without exposing EC2 or adding routes to Express.
+
+Example: Resend delivery / bounce webhooks
+Resend → POST https://api.qlarety.com/webhooks/resend
+       → API Gateway (route)
+       → Lambda "resend-webhook"
+       → verify signature (Resend signing secret)
+       → handle event (bounce, complaint, delivered)
+       → optional: update DB, disable user email, log to CloudWatch
+Flow in steps
+
+You register webhook URL in Resend dashboard.
+API Gateway exposes POST /webhooks/resend.
+Lambda runs in ~seconds, returns 200 quickly (providers retry on non-2xx).
+Heavy work (DB updates) can be: done in Lambda if fast, or enqueue to SQS for another Lambda/worker.
+Why not EC2?
+
+EC2 works too (router.post("/webhooks/resend", ...)), but Lambda gives:
+No extra load on your doc-processing server
+Built-in scaling if Resend sends many events
+Simple IAM (Lambda only needs DB/Secrets access, not full app)
+Security
+
+Verify HMAC/signature from the provider in Lambda before trusting body.
+Don’t put webhooks on the same box as Socket.IO unless you want shared rate limits and deploy coupling.
+Your project today: no webhook routes in routes/index.route.ts — this would be new infrastructure, not a migration.
+
+3. Cron (scheduled jobs)
+Cron = run something on a schedule, not when a user hits an API.
+
+Good candidates in your codebase
+Job	Why
+Delete expired verificationToken rows
+Expiry check is commented out in verifyMagicLinkToken; tokens can pile up
+Prune old Redis job keys
+Guest/temp job progress in Redis
+Archive/purge soft-deleted documents
+If you add retention policy later
+Report/metrics
+Daily OpenAI cost rollup, etc.
+How EventBridge + Lambda works
+EventBridge rule: cron(0 3 * * ? *)   # every day 03:00 UTC
+       → Lambda "nightly-cleanup"
+       → Prisma: DELETE FROM verificationToken WHERE expires < NOW()
+       → optional: Redis SCAN + DEL old keys
+       → log counts to CloudWatch
+EventBridge is AWS’s scheduler (like cron). It invokes Lambda on the schedule; you don’t run node-cron inside your Docker container.
+
+Why Lambda for cron
+
+vs cron inside EC2	Lambda + EventBridge
+Stops if container restarts badly
+Runs even if EC2 is redeploying (if DB reachable)
+Competes with doc processing for CPU
+Separate execution
+One server = one schedule
+Easy to add more schedules per function
+DB access: If Postgres is in a private VPC, the Lambda must be in that VPC (or use a public RDS with strict security groups). Use RDS Proxy or short-lived connections with Prisma to avoid connection exhaustion.
+
+What stays on EC2: Anything that must run with the live app (e.g. flushing in-memory state) — you have little of that; most state is Redis/Postgres.
+
+How the three fit together (one picture)
+EC2 Express
+Async AWS
+Lambda
+User
+Resend API
+Postgres
+Auth / Document API
+Socket.IO
+SQS email queue
+EventBridge cron
+API Gateway
+send-email
+cleanup
+resend-webhook
+Minimal vs full setup
+Minimal (one Lambda each)
+
+Email: EC2 pushes to SQS after createMagicLinkToken; one Lambda sends via Resend.
+Webhook: API Gateway → Lambda for Resend (or one provider).
+Cron: EventBridge daily → Lambda deletes expired tokens.
+Shared pieces
+
+Secrets Manager: RESEND_API_KEY, DATABASE_URL for Lambdas
+IAM: Lambda role → SQS consume, Secrets read, VPC if needed
+Deploy: SAM/CDK/Terraform separate from your GitHub → ECR → EC2 flow (or add a second workflow for Lambdas)
+What you would change in app code (conceptually)
+Area	Today	With Lambda
+signUp / requestMagicLink
+await sendMagicLink(email)
+await sqs.sendMessage({ type: 'magic_link', ... })
+sendMagicLinkEmail
+Called in-process
+Called from Lambda handler (shared module)
+Webhooks
+N/A
+New API Gateway URL, not in server.ts
+Token expiry
+Partially disabled in code
+Cron Lambda enforces cleanup in DB
+Summary
+
+Emails: EC2 creates token and enqueues; Lambda sends via Resend so API responses aren’t tied to email latency.
+Webhooks: Provider POSTs to API Gateway → Lambda verifies and reacts; keeps EC2 focused on your product API.
+Cron: EventBridge triggers Lambda on a schedule for DB/Redis housekeeping without a cron process in Docker.
+If you want this implemented, switch to Agent mode and say which piece to start with (email queue is usually the easiest win).

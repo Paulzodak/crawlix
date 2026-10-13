@@ -1,0 +1,51 @@
+{
+  "name": "qlarety-web-scraper",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "dist/src/server.js",
+  "scripts": {
+    "start": "nodemon --exec tsx src/server.ts",
+    "dev": "tsx watch src/server.ts",
+    "nodemon": "nodemon --exec tsx src/server.ts",
+    "build": "npm run prisma:generate && tsc && mkdir -p dist/src && cp -R src/generated dist/src/generated",
+    "prisma:generate": "node scripts/prisma-generate.mjs",
+    "docker": "docker-compose up --build",
+    "docker:up": "docker-compose up --build -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "docker:dev": "docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build",
+    "docker:dev:up": "docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build",
+    "validate:docker": "docker build -t doc-llm-server:validate --secret id=database_url,env=DATABASE_URL .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepare": "husky"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "Local web scraper that extracts page data with OpenAI",
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.10.0",
+    "@prisma/client": "^7.10.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "openai": "^6.9.0",
+    "pg": "^8.17.2",
+    "prisma": "^7.10.0",
+    "puppeteer": "^24.0.0",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.5",
+    "@types/node": "^24.10.1",
+    "@types/pg": "^8.16.0",
+    "@types/swagger-ui-express": "^4.1.8",
+    "husky": "^9.1.7",
+    "nodemon": "^3.1.11",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.7"
+  }
+}

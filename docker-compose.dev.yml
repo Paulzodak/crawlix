@@ -1,0 +1,27 @@
+# Dev overlay: mount source so code changes apply without rebuilding.
+# Usage: docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/app
+      - app_node_modules:/app/node_modules
+    environment:
+      - NODE_ENV=development
+      - PORT=${PORT:-8000}
+      - HOST=0.0.0.0
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
+      - DATABASE_URL=${DATABASE_URL}
+    command: sh -c "npm run prisma:generate && npm run dev"
+    healthcheck:
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+volumes:
+  app_node_modules:

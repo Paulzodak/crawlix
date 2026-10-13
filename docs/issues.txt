@@ -1,0 +1,47 @@
+First issue encountered with the document processing
+
+Initial Document processing
+
+Text => Chunk => Each chunk summarized => Analyis result
+
+Problem with this flow is 
+1. Chunking is always in accurate
+2. Chunking inaccuracy affects precise word number markings
+3. Analysis result is always different due to the fact that the analyzed result which includes phrase level corrections is extracted from the summarized chunk not the actual prompt.
+
+
+
+
+
+
+Text 
+
+  |
+  
+Chunk 
+- Split points based on Sentence or context
+[
+    {text : String}
+]
+
+Process each chunk
+  |
+Output {
+  "scores": {"risk": int, "advantages": int, "compliance": int, "potentialIssues": int, "overall": int},
+  "keyPoints": [],
+  "highlights": [{"start": int, "end": int, "type": "risk|advantage|compliance", "text": "exact text from document", "description": "optional"}]
+}
+
+
+npx prisma migrate dev
+
+
+Issue
+ 
+Encountered issue with data formatting. When text is extracted from a document, it loses it's formatting and doesn't look like the original document. This wasn't taken into consideration.
+
+Trials
+- Tried all docs conversion to pdf first so that i can retain the pdf file for processed document then render with highlights but free document converters to Pdf are far from accurate
+and the premium ones are too costly for a startup product like this.
+
+- Going with the method of adding a little bit of html into processed document to give it a little bit of formatting atleast

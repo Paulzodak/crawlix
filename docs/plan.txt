@@ -1,0 +1,105 @@
+Current state: Steps 1–11 are in place. Full pipeline + Vitest unit tests. Remaining: docs/runbook (Step 12).
+
+## Recommended fit
+
+Build this under `src/` in the existing style: routes → controllers → services → utils/parsers/docs.
+
+```
+src/
+  controllers/websitePage.controller.ts
+  routes/websitePage.route.ts
+  parsers/websitePage.ts
+  constants/pageTypes.ts
+  services/website/
+    orchestrator.service.ts
+    urlValidation.service.ts
+    urlHelpers.ts
+    pageRequest.service.ts
+    candidateUrl.service.ts
+    discovery.service.ts
+    browser.service.ts
+    httpFetch.service.ts
+    relevance.service.ts
+    contentExtraction.service.ts
+    llmVerify.service.ts
+    document.service.ts
+    cache.service.ts
+  utils/ssrf.ts
+```
+
+No new frameworks. Reuse Puppeteer + OpenAI. Skip Redis for v1 unless you want a simple DB/file cache later.
+
+## Implementation steps
+
+### Step 1 — Skeleton + API contract ✅
+- Add `POST /api/website/page`
+- Request: `{ websiteUrl, pageRequest }`
+- Response shapes for success / `PAGE_NOT_FOUND`
+- Wire route + controller + OpenAPI docs
+- Keep controller thin; call one orchestrator
+
+### Step 2 — Config + page-type catalog ✅
+- Add env/config: timeouts, max redirects, max candidates, cache TTL, OpenAI model
+- Add `constants/pageTypes.ts` with aliases and URL path patterns for known types
+- Implement request classifier → `privacy_policy | terms_* | custom | ...`
+
+### Step 3 — SSRF + URL normalization ✅
+- Rebuild `utils/ssrf.ts` / `urlValidation.service.ts`
+- HTTP(S) only, block private/loopback/link-local/metadata, DNS check, redirect limits, same-site rule
+
+### Step 4 — Candidate URL generator ✅
+- From classified type + website origin, generate likely paths (`/privacy`, `/legal/privacy`, …)
+- Deduplicate and normalize; do not assume they exist
+
+### Step 5 — Shared Puppeteer browser service ✅
+- One reusable browser, open/close pages, nav timeout, crash recovery
+- Optionally block images/fonts/ads
+- Helpers: goto with redirect/SSRF checks, extract links, extract main content
+
+### Step 6 — Discovery pipeline (no full crawl) ✅
+Order:
+1. Probe known candidates
+2. Homepage link discovery (nav/footer/same-domain)
+3. Score links (anchor + path + aliases)
+4. Sitemap/robots fallback with size limits
+5. LLM ranking only for custom / low-confidence cases, using discovered URLs only
+
+### Step 7 — Content extraction + normalize ✅
+- Prefer `main` / `article` / `[role=main]`, then `body`
+- Strip scripts/styles/nav/cookie chrome; keep headings, paragraphs, lists, useful tables/metadata
+- Emit normalized document: `title`, `url`, `sourceUrl`, `type`, `content`, `confidence`, `metadata`
+
+### Step 8 — LLM verification ✅
+- After a shortlist of candidates with extracted content
+- Strict JSON: `isMatch`, `pageType`, `confidence`, `reason`
+- Reject non-matches; pick highest confidence match; never invent URLs/content
+
+### Step 9 — Orchestrator ✅
+- Cache lookup → classify → candidates → discover → score → extract → verify → normalize → cache store
+- Map failures to stable codes: `INVALID_URL`, `SSRF_BLOCKED`, `PAGE_NOT_FOUND`, etc.
+- Log internals; return safe client errors
+
+### Step 10 — Cache (lightweight first) ✅
+- No Redis in repo: start with in-memory TTL store keyed by `host + pageType/request`
+- Interface ready to swap for Redis later if needed
+
+### Step 11 — Tests ✅
+- Unit: SSRF, classifier, candidates, scoring, URL helpers, LLM JSON parsing, cache single-flight
+- Integration: fixture HTML / mocked Puppeteer deferred (optional follow-up)
+- Vitest via `npm test`
+
+### Step 12 — Docs + runbook
+- Update README/Swagger with request examples and env vars
+- Note limits: not a full crawler; max pages/candidates; JS-heavy sites may need longer waits
+
+## Suggested build order for coding sessions
+1. Steps 1–3 (API + config + SSRF)  
+2. Steps 4–6 (discovery)  
+3. Steps 7–9 (extract + LLM + orchestrate)  
+4. Steps 10–12 (cache, tests, docs)
+
+## Dependencies
+- Keep: `express`, `puppeteer`, `openai`, `prisma` (optional persistence later)
+- Add only if needed: test runner; Redis only if you insist on shared cache now
+
+Say which session to start with (1–3 is the safest first slice), and I’ll implement that slice next.

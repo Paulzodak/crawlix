@@ -1,0 +1,18 @@
+   npm run docker:up
+      npm run docker:down
+   # or
+   docker-compose down
+
+      npm run docker:logs
+   # or
+   docker-compose logs -f
+
+   npx prisma migrate dev --name test
+      npm run prisma:migrate
+
+      npx prisma generate 
+
+      
+docker-compose -f docker-compose.new.yml up
+
+npm run docker:dev

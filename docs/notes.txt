@@ -1,0 +1,154 @@
+Export higlights
+Add magic link email request limit
+Share
+- Should have options of sharing
+- Each document should have either public or private visibility
+
+Fix OCR Input section (Camera and File upload)
+Fix OCR Edit feature
+Fix Preview button
+
+
+
+
+
+
+
+
+
+
+
+Client connected: e6TRSAPVkbWOHNPIAAAB
+[OpenAI cost] analyzeLegalDocument | model=gpt-4o-mini | in=1012 out=20 | cost=$0.000164 USD | total(analyzeLegalDocument)=$0.0002
+[OpenAI cost] getDocumentNameFromOpenAI | model=gpt-4o-mini | in=846 out=4 | cost=$0.000129 USD | total(getDocumentNameFromOpenAI)=$0.0001
+--------- Chunking in sections--------
+[OpenAI cost] chunkTextWithOpenAI | model=gpt-4o-mini | in=2362 out=2138 | cost=$0.001637 USD | total(chunkTextWithOpenAI)=$0.0016
+[OpenAI cost] chunkTextWithOpenAI | model=gpt-4o-mini | in=3953 out=3822 | cost=$0.002886 USD | total(chunkTextWithOpenAI)=$0.0045
+[OpenAI cost] chunkTextWithOpenAI | model=gpt-4o-mini | in=4159 out=4044 | cost=$0.003050 USD | total(chunkTextWithOpenAI)=$0.0076
+[OpenAI cost] chunkTextWithOpenAI | model=gpt-4o-mini | in=4194 out=3960 | cost=$0.003005 USD | total(chunkTextWithOpenAI)=$0.0106
+Analyzing chunk 1 of 44
+Analyzing chunk 2 of 44
+Analyzing chunk 3 of 44
+Analyzing chunk 4 of 44
+Analyzing chunk 5 of 44
+Analyzing chunk 6 of 44
+Analyzing chunk 7 of 44
+Analyzing chunk 8 of 44
+Analyzing chunk 9 of 44
+Analyzing chunk 10 of 44
+Analyzing chunk 11 of 44
+Analyzing chunk 12 of 44
+Analyzing chunk 13 of 44
+Analyzing chunk 14 of 44
+Analyzing chunk 15 of 44
+Analyzing chunk 16 of 44
+Analyzing chunk 17 of 44
+Analyzing chunk 18 of 44
+Analyzing chunk 19 of 44
+Analyzing chunk 20 of 44
+Analyzing chunk 21 of 44
+Analyzing chunk 22 of 44
+Analyzing chunk 23 of 44
+Analyzing chunk 24 of 44
+Analyzing chunk 25 of 44
+Analyzing chunk 26 of 44
+Analyzing chunk 27 of 44
+Analyzing chunk 28 of 44
+Analyzing chunk 29 of 44
+Analyzing chunk 30 of 44
+Analyzing chunk 31 of 44
+Analyzing chunk 32 of 44
+Analyzing chunk 33 of 44
+Analyzing chunk 34 of 44
+Analyzing chunk 35 of 44
+Analyzing chunk 36 of 44
+Analyzing chunk 37 of 44
+Analyzing chunk 38 of 44
+Analyzing chunk 39 of 44
+Analyzing chunk 40 of 44
+Analyzing chunk 41 of 44
+Analyzing chunk 42 of 44
+Analyzing chunk 43 of 44
+Analyzing chunk 44 of 44
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1716 out=261 | cost=$0.006900 USD | total(AnalyzeChunk)=$0.0069
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1780 out=336 | cost=$0.007810 USD | total(AnalyzeChunk)=$0.0147
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1645 out=370 | cost=$0.007813 USD | total(AnalyzeChunk)=$0.0225
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1567 out=619 | cost=$0.010107 USD | total(AnalyzeChunk)=$0.0326
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1665 out=918 | cost=$0.013343 USD | total(AnalyzeChunk)=$0.0460
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1478 out=511 | cost=$0.008805 USD | total(AnalyzeChunk)=$0.0548
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1375 out=335 | cost=$0.006788 USD | total(AnalyzeChunk)=$0.0616
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1363 out=363 | cost=$0.007038 USD | total(AnalyzeChunk)=$0.0686
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1252 out=204 | cost=$0.005170 USD | total(AnalyzeChunk)=$0.0738
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1324 out=385 | cost=$0.007160 USD | total(AnalyzeChunk)=$0.0809
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1211 out=318 | cost=$0.006207 USD | total(AnalyzeChunk)=$0.0871
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1282 out=340 | cost=$0.006605 USD | total(AnalyzeChunk)=$0.0937
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1253 out=409 | cost=$0.007222 USD | total(AnalyzeChunk)=$0.1010
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1303 out=341 | cost=$0.006667 USD | total(AnalyzeChunk)=$0.1076
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1408 out=418 | cost=$0.007700 USD | total(AnalyzeChunk)=$0.1153
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1237 out=239 | cost=$0.005483 USD | total(AnalyzeChunk)=$0.1208
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1390 out=445 | cost=$0.007925 USD | total(AnalyzeChunk)=$0.1287
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1209 out=284 | cost=$0.005862 USD | total(AnalyzeChunk)=$0.1346
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1254 out=329 | cost=$0.006425 USD | total(AnalyzeChunk)=$0.1410
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1324 out=431 | cost=$0.007620 USD | total(AnalyzeChunk)=$0.1486
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1341 out=444 | cost=$0.007793 USD | total(AnalyzeChunk)=$0.1564
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1477 out=460 | cost=$0.008292 USD | total(AnalyzeChunk)=$0.1647
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1130 out=38 | cost=$0.003205 USD | total(AnalyzeChunk)=$0.1679
+Failed to parse JSON: SyntaxError: Unexpected token 'I', "I'm unable"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at AnalyzeChunk (/Users/dev/Documents/doc-llm-server/src/services/summarization.service.ts:357:25)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1359 out=442 | cost=$0.007817 USD | total(AnalyzeChunk)=$0.1758
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1275 out=337 | cost=$0.006558 USD | total(AnalyzeChunk)=$0.1823
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1459 out=368 | cost=$0.007328 USD | total(AnalyzeChunk)=$0.1896
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1236 out=223 | cost=$0.005320 USD | total(AnalyzeChunk)=$0.1950
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1499 out=716 | cost=$0.010908 USD | total(AnalyzeChunk)=$0.2059
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1290 out=200 | cost=$0.005225 USD | total(AnalyzeChunk)=$0.2111
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1250 out=261 | cost=$0.005735 USD | total(AnalyzeChunk)=$0.2168
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1420 out=361 | cost=$0.007160 USD | total(AnalyzeChunk)=$0.2240
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1239 out=204 | cost=$0.005138 USD | total(AnalyzeChunk)=$0.2291
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1300 out=333 | cost=$0.006580 USD | total(AnalyzeChunk)=$0.2357
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1310 out=296 | cost=$0.006235 USD | total(AnalyzeChunk)=$0.2419
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1374 out=500 | cost=$0.008435 USD | total(AnalyzeChunk)=$0.2504
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1223 out=172 | cost=$0.004778 USD | total(AnalyzeChunk)=$0.2552
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1188 out=183 | cost=$0.004800 USD | total(AnalyzeChunk)=$0.2600
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1457 out=398 | cost=$0.007622 USD | total(AnalyzeChunk)=$0.2676
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1297 out=323 | cost=$0.006472 USD | total(AnalyzeChunk)=$0.2740
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1322 out=443 | cost=$0.007735 USD | total(AnalyzeChunk)=$0.2818
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1389 out=465 | cost=$0.008123 USD | total(AnalyzeChunk)=$0.2899
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1287 out=361 | cost=$0.006828 USD | total(AnalyzeChunk)=$0.2967
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1333 out=391 | cost=$0.007243 USD | total(AnalyzeChunk)=$0.3040
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1176 out=169 | cost=$0.004630 USD | total(AnalyzeChunk)=$0.3086
+
+
+
+[OpenAI cost] analyzeLegalDocument | model=gpt-4o-mini | in=1012 out=20 | cost=$0.000164 USD | total(analyzeLegalDocument)=$0.0003
+[OpenAI cost] getDocumentNameFromOpenAI | model=gpt-4o-mini | in=846 out=4 | cost=$0.000129 USD | total(getDocumentNameFromOpenAI)=$0.0003
+--------- Chunking in one go --------
+[OpenAI cost] chunkTextWithOpenAI | model=gpt-4o-mini | in=1751 out=1483 | cost=$0.001152 USD | total(chunkTextWithOpenAI)=$0.0117
+Analyzing chunk 1 of 4
+Analyzing chunk 2 of 4
+Analyzing chunk 3 of 4
+Analyzing chunk 4 of 4
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1549 out=415 | cost=$0.008023 USD | total(AnalyzeChunk)=$0.3166
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1376 out=254 | cost=$0.005980 USD | total(AnalyzeChunk)=$0.3226
+Stream reading error: TypeError: terminated
+    at Fetch.onAborted (node:internal/deps/undici/undici:11124:53)
+    at Fetch.emit (node:events:518:28)
+    at Fetch.terminate (node:internal/deps/undici/undici:10282:14)
+    at Object.onError (node:internal/deps/undici/undici:11245:38)
+    at Request.onError (node:internal/deps/undici/undici:2094:31)
+    at Object.errorRequest (node:internal/deps/undici/undici:1591:17)
+    at TLSSocket.<anonymous> (node:internal/deps/undici/undici:6319:16)
+    at TLSSocket.emit (node:events:530:35)
+    at node:net:351:12
+    at TCP.done (node:_tls_wrap:650:7) {
+  [cause]: BodyTimeoutError: Body Timeout Error
+      at FastTimer.onParserTimeout [as _onTimeout] (node:internal/deps/undici/undici:6253:32)
+      at Timeout.onTick [as _onTimeout] (node:internal/deps/undici/undici:2210:17)
+      at listOnTimeout (node:internal/timers:594:17)
+      at process.processTimers (node:internal/timers:529:7) {
+    code: 'UND_ERR_BODY_TIMEOUT'
+  }
+}
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1308 out=347 | cost=$0.006740 USD | total(AnalyzeChunk)=$0.3293
+[OpenAI cost] AnalyzeChunk | model=gpt-4o | in=1372 out=350 | cost=$0.006930 USD | total(AnalyzeChunk)=$0.3363
