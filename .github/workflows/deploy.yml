@@ -29,7 +29,11 @@ jobs:
           aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.ECR_URI }}
 
       # STEP 4: Build Docker image
+      # prisma db pull runs inside the image build and reads DATABASE_URL from
+      # the Compose secret (docker-compose.yml → environment: DATABASE_URL).
       - name: Build image
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: docker compose build app
 
       # STEP 5: Push image to ECR
